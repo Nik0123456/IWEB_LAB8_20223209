@@ -1,0 +1,80 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.example.iweb_lab8_20223209.beans.*"%>
+
+<%@page import="java.text.NumberFormat"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+  //Job job = (Job) request.getAttribute("job");
+  ArrayList<Pelicula> listaPeliculas = (ArrayList) request.getAttribute("listaPeliculas");
+  ArrayList<Genero> listaGeneros = (ArrayList) request.getAttribute("listaGeneros");
+  String searchTerm = request.getParameter("searchTerm");
+  Genero generoSeleccionado = (Genero) request.getAttribute("generoSeleccionado");
+  NumberFormat formatter = NumberFormat.getInstance();
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Películas</title>
+</head>
+<body>
+
+<h1>Lista de Películas</h1>
+
+<form action="listaPeliculas" method="POST">
+  <div class="combobox-container">
+
+
+    <input type="hidden" name="action" value="filtrar">
+    <button type="submit">Filtrar</button>
+    <form action="listaPeliculas?action=listar" method="GET">
+      <button type="submit">Limpiar</button>
+    </form>
+  </div>
+
+</form>
+
+
+<table>
+  <tr>
+
+    <th>Titulo</th>
+    <th>Director</th>
+    <th>Ano Publicacion</th>
+    <th>Rating</th>
+    <th>BoxOffice</th>
+    <th>Genero Id</th>
+    <th>Actores</th>
+    <th>Borrar</th>
+
+  </tr>
+  <%
+    for (Pelicula movie : listaPeliculas) {
+  %>
+  <tr>
+
+    <td><a href="viewPelicula?idPelicula=<%= movie.getIdPelicula() %>"><%=movie.getTitulo()%></a></td>
+    <td><%=movie.getDirector()%></td>
+    <td><%=movie.getAnoPublicacion()%></td>
+    <td><%=movie.getRating()%>/10</td>
+    <td>$<%=formatter.format(movie.getBoxOffice())%></td>
+    <td><%=movie.getIdGenero()%></td>
+    <td><a href="listaActores?idPelicula=<%= movie.getIdPelicula() %>">Ver Actores</a></td>
+    <%
+      if (1 == 1) {
+    %>
+    <td> <a href="listaPeliculas?action=borrar&idPelicula=<%= movie.getIdPelicula() %>" class="button-link">Borrar</a></td>
+    <%
+      }
+    %>
+  </tr>
+
+  <%
+    }
+  %>
+
+</table>
+
+</body>
+</html>
